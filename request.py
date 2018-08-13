@@ -1,4 +1,3 @@
-import re
 
 def _parseQueryParams(queryString):
     params = queryString.split('&')
@@ -25,11 +24,11 @@ def requestFromString(req):
 
     headers = {}
     for line in lines[1:bodyStartInd]:
-        m = re.search('^([^:]+):(.*)$', line)
-        if m is None :
+        ind = line.find(':')
+        if ind < 0 && ind < (len(line) - 1):
             continue
-        key = m.group(1).strip()
-        value = m.group(2).strip()
+        key = line[:ind].strip()
+        value = line[(ind + 1):].strip()
         headers[key] = value
 
     body = "\r\n".join(lines[(bodyStartInd + 1):]) if bodyStartInd > -1 else ""
