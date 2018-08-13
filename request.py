@@ -13,7 +13,7 @@ class Request:
         self.body = body
 
     @staticmethod
-    def _parseQueryParams(queryString):
+    def _parseQParams(queryString):
         params = queryString.split('&')
         valids = [a.split('=') for a in params if len(a.split('=')) == 2]
         queryParams = {}
@@ -25,7 +25,8 @@ class Request:
     def _getPathAndQueryParams(fullPath):
         ind = fullPath.find('?')
         path = fullPath[:ind] if ind > -1 else fullPath
-        queryParams = Request._parseQueryParams(fullPath[(ind + 1):]) if ind > -1 else {}
+        queryParams =
+            Request._parseQParams(fullPath[(ind + 1):]) if ind > -1 else {}
         return (path, queryParams)
 
     @staticmethod
