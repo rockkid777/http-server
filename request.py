@@ -29,6 +29,18 @@ class Request:
         return (path, queryParams)
 
     @staticmethod
+    def _parseHeaders(lines):
+        headers = {}
+        for line in lines :
+            ind = line.find(':')
+            if ind < 0 or ind >= (len(line) - 1):
+                continue
+            key = line[:ind].strip()
+            value = line[(ind + 1):].strip()
+            headers[key] = value
+        return headers
+
+    @staticmethod
     def fromString(req):
         lines = req.split('\r\n')
         method, path, queryParams, httpVer = '', '', {}, ''
@@ -37,15 +49,7 @@ class Request:
         httpVer = args[2]
         (path, queryParams) = Request._getPathAndQueryParams(args[1])
         bodyStartInd = lines.index('')
-
-        headers = {}
-        for line in lines[1:bodyStartInd]:
-            ind = line.find(':')
-            if ind < 0 or ind >= (len(line) - 1):
-                continue
-            key = line[:ind].strip()
-            value = line[(ind + 1):].strip()
-            headers[key] = value
+        headers = Request._parseHeaders(lines[1:bodyStartInd])
 
         body = "\r\n".join(lines[(bodyStartInd + 1):]) if bodyStartInd > -1 else ""
 
