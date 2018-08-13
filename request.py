@@ -25,8 +25,7 @@ class Request:
     def _getPathAndQueryParams(fullPath):
         ind = fullPath.find('?')
         path = fullPath[:ind] if ind > -1 else fullPath
-        queryParams =
-            Request._parseQParams(fullPath[(ind + 1):]) if ind > -1 else {}
+        queryParams = Request._parseQParams(fullPath[(ind + 1):]) if ind > -1 else {}
         return (path, queryParams)
 
     @staticmethod
