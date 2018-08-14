@@ -1,6 +1,7 @@
 import sys
 import socket
 import request
+from response import Response
 
 port = int(sys.argv[1] if len(sys.argv) > 1 else 8080)
 print("Running on port {}".format(port))
@@ -22,14 +23,11 @@ while True:
     # print(req.split('\r\n'))
     body = '{"a":123}'
 
-    http_response = """\
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-Content-Length: {}
+    response = Response(headers = {"Content-Length": len(body)},
+                        body = body)
 
-{}""".format(len(body), body)
     print("------------")
-    print(http_response)
+    print(response.toString())
 
-    connection.sendall(http_response)
+    connection.sendall(response.toString())
     connection.close()
