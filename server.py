@@ -23,7 +23,8 @@ while True:
     # print(req.split('\r\n'))
     body = '{"a":123}'
 
-    response = Response(headers = {"Content-Length": len(body)},
+    response = Response(headers = {"Content-Length": len(body)
+                                    , "Content-Type": "application/json"},
                         body = body)
 
     print("------------")
