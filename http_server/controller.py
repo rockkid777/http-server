@@ -7,6 +7,6 @@ class Controller:
     def __init__(self, router = None):
         self.router = router
 
-    def registerHandlers(self, router = self.router):
+    def registerHandlers(self, router):
         # for override
         pass
