@@ -4,7 +4,7 @@ class Route:
 
     def __init__(self, method, pathPrefix, pathExp, handler):
         self.method = method.upper()
-        self.regex = Route.makePathRegExp(pathPrefix, pathExp)
+        self.regex = re.compile(Route.makePathRegExp(pathPrefix, pathExp))
         self.handler = handler
 
     @staticmethod
@@ -16,4 +16,4 @@ class Route:
             return "(?P<{}>[^/]+)".format(name)
         suffix = "/" if pathExp[-1] == "/" else ""
         exp = "/".join(map(conv, pathExp.split('/')[1:])) + suffix
-        return pathPrefix + exp
+        return "^" + pathPrefix + exp + "$"
