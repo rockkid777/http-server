@@ -1,5 +1,5 @@
 import unittest
-from request import Request
+from ..request import Request
 
 
 class TestRequestParsing(unittest.TestCase):
