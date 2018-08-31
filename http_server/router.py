@@ -25,6 +25,25 @@ class Router:
         for controller in controllers :
             controller.registerHandlers(self)
 
-    def route(self, request, response = Response()):
-        #todo
-        pass
+    def _local_route(self, routes, request, response):
+        for route in routes :
+            if route.match(request.path) :
+                route.handler(request, response)
+                return True
+        return False
+
+    def route(self, request, response = Response().NotFound):
+        for router in routers :
+            if router.route(request, response) :
+                return True
+        if request.method == "GET" :
+            return _local_route(self.get, request, response)
+        if request.method == "POST" :
+            return _local_route(self.post, request, response)
+        if request.method == "PUT" :
+            return _local_route(self.put, request, response)
+        if request.method == "PATCH" :
+            return _local_route(self.patch, request, response)
+        if request.method == "DELETE" :
+            return _local_route(self.delete, request, response)
+        return False
