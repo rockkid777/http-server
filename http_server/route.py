@@ -2,9 +2,10 @@ import re
 
 class Route:
 
-    def __init__(self, method, pathPrefix, pathExp, handler):
+    def __init__(self, method, pathPrefix, pathExp, controller, handler):
         self.method = method.upper()
         self.regex = re.compile(Route.makePathRegExp(pathPrefix, pathExp))
+        self.controller = controller
         self.handler = handler
 
     @staticmethod

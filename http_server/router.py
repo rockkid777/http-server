@@ -19,7 +19,17 @@ class Router:
         # for override
         pass
 
-    def addRoute(self, method, path, handler):
+    def register(self, method, path):
+        def decorator(handler):
+            ctrl = ''
+            def wrapper(controller, *args):
+                ctrl = controller
+                return handler(conrtoller, *args)
+            self.addRoute(method, path, ctrl, handler)
+            return wrapper
+        return decorator
+
+    def addRoute(self, method, path, controller, handler):
         if method == "GET" :
             routes = self.get
         elif method == "POST" :
@@ -32,7 +42,7 @@ class Router:
             routes = self.delete
         else :
             return
-        route = Route(method, self.pathPrefix, path, handler)
+        route = Route(method, self.pathPrefix, path, controller, handler)
         routes.append(route)
 
     def loadRoutes(self):
@@ -46,7 +56,7 @@ class Router:
             m = route.regex.match(request.path)
             if m :
                 request.params = m.groupdict()
-                route.handler(request, response)
+                route.handler(route.controller, request, response)
                 return True
         return False
 
