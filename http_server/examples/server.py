@@ -7,23 +7,29 @@ from ..route import Route
 from ..router import Router
 from ..controller import Controller
 
+class MyRouter(Router):
+    def registerControllers(self):
+        self.controllers.append(MyController(self))
+
+router = MyRouter("/api/v1/")
+
 class MyController(Controller) :
+    @router.register("POST", "/echo")
     def postEcho(self, request, response):
         response = Response(status = Status.Ok()
                           , body = request.body)
 
+    @router.register("GET", "/echo/:msg")
     def getEcho(self, request, response):
+        print("sdfa")
         msg = request.params["msg"]
         response.status = Status.Ok()
         response.body = {"msg": msg}
 
-    def registerHandlers(self, router):
-        router.addRoute("POST", "/echo", self.postEcho)
-        router.addRoute("GET", "/echo/:msg", self.getEcho)
+    # def registerHandlers(self, router):
+        # router.addRoute("POST", "/echo", self.postEcho)
+        # router.addRoute("GET", "/echo/:msg", self.getEcho)
 
-class MyRouter(Router):
-    def registerControllers(self):
-        self.controllers.append(MyController(self))
 
 port = int(sys.argv[1] if len(sys.argv) > 1 else 8080)
 
@@ -33,7 +39,6 @@ listen_socket.bind(('', port))
 listen_socket.listen(1)
 print("Running on port {}".format(port))
 
-router = MyRouter("/api/v1/")
 router.registerControllers()
 router.loadRoutes()
 
